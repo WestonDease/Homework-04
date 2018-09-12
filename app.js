@@ -44,36 +44,18 @@ const employeeList = [
 
 const activeList = [];
 
-const clicked = (event) => {
-  event.preventDefault();
-  // create a const that stores the id of the event.target (what you clicked on)
-  const whatIdWasClicked = event.target.id;
-  // compare the id of what what clicked on, with the id you need or 
-  //want to tie a function to
-  if( whatIdWasClicked ==="newAButton"){
-      // This is where you can execute the operations/functions you need
-      // or want to happen from clicking on your new button
-      console.log("You just clicked on a dynamically made button. ")
-      
-      
-  }
-  
-  // this else statement is NOT needed and is only placed here to show
-  // what is happening when we click on .container
-  else {
-      console.log("You are clicking everywhere else but the button.")
-  }
-};
-const forFxn = (event) => { 
-  // prevent the button from refreshing the page 
-  event.preventDefault()
-  
-  // append a new button to your .container
-  $(".container").append(`<button id = "newAButton"> The NEW Button </button>`);
-  
+const userIn = {
+  name: 0 ,
+  officeNum: 0 ,
+  phoneNum: 0
 }
 
+var requiredAction;
 
+
+//
+// UNIVERSAL CALLS
+//
 function renderElement (){
   $("#display-board").empty();
   for(let i = 0; i < activeList.length; i++){
@@ -82,7 +64,58 @@ function renderElement (){
   console.log(activeList);
 }
 
-function printUser() {
+function submit() {
+  event.preventDefault();
+
+  //if elements are filled in the userIn object takes the values
+  if ($(".name").val() !== undefined){
+    userIn.name = $(".name").val();
+  }
+  if ($(".name").val() !== undefined){
+    userIn.officeNum = $(".officeNum").val();
+  }
+  if ($(".name").val() !== undefined){
+    userIn.phoneNum = $(".phoneNum").val();
+  }
+
+  //debug
+  console.log(employeeList);
+  console.log(userIn);
+
+  //determines which action is required (print not needed as no user input)
+  switch (requiredAction) {
+    case "verifyUser":
+      verifyUser();
+      break;
+
+    case "lookupUser":
+      lookupUser();
+      break;
+
+    case "containsUser":
+      containsUser();
+      break;
+
+    case "updateUser":
+      updateUser();
+      break;
+
+     case "addUser":
+      addUser();
+      break;
+
+    case "deleteUser":
+      deleteUser();
+      break;
+  }
+}
+
+
+
+//
+// PRINT EMPLOYEE LIST ROUTINE
+//
+function displayPrint() {
   employeeList.forEach(element => {
     activeList.push(element.name);
     activeList.push(element.officeNum);
@@ -92,53 +125,101 @@ function printUser() {
   renderElement();
 }
 
-function verifyUser(){
 
-  $("#input").append("<form><input type=\"text\" id=\"search-input\" placeholder=\"Employee Name\" autocomplete=\"off\" />"
-  + "<button id=\"search\">Search</button></form>");
-  $("search").on('click', verifySubRoutine);
-}
-
-function verifySubRoutine() {
+//
+// VERIFY EMPLOYEE LIST ROUTINE
+//
+function displayVerify(){
   event.preventDefault();
-  const empName = $("#search-input").val;
-  var found = "Employee Not Found";
 
-  for (let i = 0; i < employeeList.length; i++){
-    if (employeeList[i].name == empName){
-      found = "Employee Found";     
-    }
-  }
+  //reveal name and button
+  $(".name").toggleClass("hider");
+  $(".button").toggleClass("hider");
 
-  activeList.push(found);
-  render();
+  //sets submit button to verify
+  requiredAction = "verifyUser";
 }
 
-function lookupUser(){
-  const empName = prompt("Name to lookup");
+function verifyUser() {
+  event.preventDefault();
+
+
+  var found = "Employee Not Found"
+  employeeList.forEach(element => {
+    if (element.name === userIn.name){
+      found = "Employee Found";
+    }
+  });
   
-  for (let i = 0; i < employeeList.length; i++){
-    if (employeeList[i].name == empName){
-      activeList.push(employeeList[i].name);
-      activeList.push(employeeList[i].officeNum);
-      activeList.push(employeeList[i].phoneNum);
-    }
-  }
+  activeList.push(found);
+  renderElement();
+
+  //$(".name").toggleClass("hider");
+  //$(".button").toggleClass("hider");
 }
 
-function containsUser(){
-  const userString = prompt("String to include");
 
-  for (let i = 0; i < employeeList.length; i++){
-    if (employeeList[i].name.contains(userString)){
-      render(employeeList[i].name);
-      render(employeeList[i].officeNum);
-      render(employeeList[i].phoneNum);
-    }
-  }
+//
+// LOOKUP LIST ROUTINE
+//
+function displayLookup(){
+  
+
+  $(".name").toggleClass("hider");
+  $(".button").toggleClass("hider");
+
+  requiredAction = "lookupUser";
 }
 
-function updateUser(){
+function lookupUser() {
+  employeeList.forEach(element => {
+    if (element.name == userIn.name){
+      activeList.push(element.name);
+      activeList.push(element.officeNum);
+      activeList.push(element.phoneNum);
+    }
+  });
+
+  renderElement();
+}
+
+
+//
+// Contains List Routine
+//
+function displayContains(){
+
+  $(".name").toggleClass("hider");
+  $(".button").toggleClass("hider");
+
+  requiredAction = "containsUser";
+}
+
+function containsUser() {
+  employeeList.forEach(element => {
+    if (element.name.includes(userIn.name)){
+      activeList.push(element.name);
+      activeList.push(element.officeNum);
+      activeList.push(element.phoneNum);
+    }
+  });
+
+  renderElement();
+}
+
+
+//
+// Update List Routine
+//
+function displayUpdate(){
+
+  $(".name").toggleClass("hider");
+  $(".officeNum").toggleClass("hider");
+  $(".phoneNum").toggleClass("hider");
+  $(".button").toggleClass("hider");
+
+  requiredAction = "containsUser";
+
   const empName = prompt("Employee Name");  
   const feild = prompt("What would you like to update: 1. name , 2. office number, 3. phone number");
   const change = prompt("new info");
@@ -173,7 +254,21 @@ function updateUser(){
   }
 }
 
-function addUser() {
+function updateUser() {
+
+  var nameAnchor;
+
+  employeeList.forEach(element => {
+    if (element.name == userIn.name){
+      nameAnchor = element.name;
+    }
+  });
+
+  
+
+}
+
+function displayAdd() {
   const empName = prompt("new empoyee name");
   const empOffice = prompt("new empoyee office number");
   const empPhone = prompt("new empoyee phone number");
@@ -183,7 +278,7 @@ function addUser() {
   printUser();
 }
 
-function deleteUser(){
+function displayDelete(){
   const empName = prompt("empoyee name");
 
   for (let i = 0; i < employeeList.length; i++){
@@ -195,13 +290,12 @@ function deleteUser(){
   printUser();
 }
 
-$("#Print").on('click', printUser);
-$("#Verify").on('click', verifyUser);
-$("#Lookup").on('click', lookupUser);
-$("#Contains").on('click', containsUser);
-$("#Update").on('click', updateUser);
-$("#Add").on('click', addUser);
-$("#Delete").on('click', deleteUser);
+$("#Print").on('click', displayPrint);
+$("#Verify").on('click', displayVerify);
+$("#Lookup").on('click', displayLookup);
+$("#Contains").on('click', displayContains);
+$("#Update").on('click', displayUpdate);
+$("#Add").on('click', displayAdd);
+$("#Delete").on('click', displayDelete);
 
-$("#add").on("click", forFxn)
-$("#search").on("click", clicked)
+$(".button").on('click', submit);
