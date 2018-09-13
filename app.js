@@ -62,6 +62,10 @@ function renderElement (){
       $("#display-board").append("<div>" + activeList[i] + "</div>")
   }
   console.log(activeList);
+
+  activeList.forEach(element => {
+    activeList.splice(0, 1);
+  });
 }
 
 function submit() {
@@ -110,6 +114,31 @@ function submit() {
   }
 }
 
+// Resets hider elements
+var userReset;
+
+function setInput(){
+  if (userReset === "setName") {
+    setName();
+  }
+  if (userReset === "setAllFeilds") {
+    setAllFeilds();
+  }
+  console.log(userReset);
+}
+
+function setName() {
+    $(".name").toggleClass("hider");
+    $(".button").toggleClass("hider");
+}
+
+function setAllFeilds() {
+  $(".name").toggleClass("hider");
+  $(".officeNum").toggleClass("hider");
+  $(".phoneNum").toggleClass("hider");
+  $(".button").toggleClass("hider");
+}
+
 
 
 //
@@ -133,8 +162,9 @@ function displayVerify(){
   event.preventDefault();
 
   //reveal name and button
-  $(".name").toggleClass("hider");
-  $(".button").toggleClass("hider");
+  setInput();
+  userReset = "setName";
+  setInput();
 
   //sets submit button to verify
   requiredAction = "verifyUser";
@@ -142,7 +172,6 @@ function displayVerify(){
 
 function verifyUser() {
   event.preventDefault();
-
 
   var found = "Employee Not Found"
   employeeList.forEach(element => {
@@ -164,9 +193,9 @@ function verifyUser() {
 //
 function displayLookup(){
   
-
-  $(".name").toggleClass("hider");
-  $(".button").toggleClass("hider");
+  setInput();
+  userReset = "setName";
+  setInput();
 
   requiredAction = "lookupUser";
 }
@@ -189,8 +218,9 @@ function lookupUser() {
 //
 function displayContains(){
 
-  $(".name").toggleClass("hider");
-  $(".button").toggleClass("hider");
+  setInput();
+  userReset = "setName";
+  setInput();
 
   requiredAction = "containsUser";
 }
@@ -213,81 +243,81 @@ function containsUser() {
 //
 function displayUpdate(){
 
-  $(".name").toggleClass("hider");
-  $(".officeNum").toggleClass("hider");
-  $(".phoneNum").toggleClass("hider");
-  $(".button").toggleClass("hider");
+  setInput();
+  userReset = "setAllFeilds";
+  setInput();
 
-  requiredAction = "containsUser";
+  requiredAction = "updateUser";
 
-  const empName = prompt("Employee Name");  
-  const feild = prompt("What would you like to update: 1. name , 2. office number, 3. phone number");
-  const change = prompt("new info");
-
-  if (feild == 1){
-    for (let i = 0; i < employeeList.length; i++){
-      if (employeeList[i].name === empName){
-        employeeList[i].name = change;
-        render(employeeList[i].name);
-        render(employeeList[i].officeNum);
-        render(employeeList[i].phoneNum);
-      }
-    }
-  } else if (feild == 2) {
-    for (let i = 0; i < employeeList.length; i++){
-      if (employeeList[i].name === empName){
-        employeeList[i].officeNum = change;
-        render(employeeList[i].name);
-        render(employeeList[i].officeNum);
-        render(employeeList[i].phoneNum);
-      }
-    }
-  } else if (feild == 3) {
-    for (let i = 0; i < employeeList.length; i++){
-      if (employeeList[i].name === empName){
-        employeeList[i].feild = change;
-        render(employeeList[i].name);
-        render(employeeList[i].officeNum);
-        render(employeeList[i].phoneNum);
-      }
-    }
-  }
 }
 
 function updateUser() {
 
-  var nameAnchor;
-
   employeeList.forEach(element => {
     if (element.name == userIn.name){
-      nameAnchor = element.name;
+      element.officeNum == userIn.officeNum;
+      element.phoneNum = userIn.phoneNum;
+
+      activeList.push(element.name);
+      activeList.push(element.officeNum);
+      activeList.push(element.phoneNum);
+
     }
   });
 
-  
+  renderElement();
 
 }
 
+
+//
+// ADD LIST ROUTINE
+//
 function displayAdd() {
-  const empName = prompt("new empoyee name");
-  const empOffice = prompt("new empoyee office number");
-  const empPhone = prompt("new empoyee phone number");
 
-  employeeList.push(name, officeNum, phoneNum);
+  setInput();
+  userReset = "setAllFeilds";
+  setInput();
 
-  printUser();
+  requiredAction = "addUser";
 }
 
-function displayDelete(){
-  const empName = prompt("empoyee name");
+function addUser() {
+  employeeList.push(userIn);
+  console.log(employeeList);
 
-  for (let i = 0; i < employeeList.length; i++){
-    if (employeeList[i].name === empName){
-      employeeList.splice(index, 1);
+  activeList.push(userIn.name);
+  activeList.push(userIn.officeNum);
+  activeList.push(userIn.phoneNum);
+
+  renderElement();
+}
+
+
+//
+// DELETE LIST ROUTINE
+//
+function displayDelete() {
+  
+  setInput();
+  userReset = "setName";
+  setInput();
+
+  requiredAction = "deleteUser";
+}
+
+function deleteUser() {
+  employeeList.forEach(element => {
+    if (element.name === userIn.name){
+      employeeList.splice(employeeList.indexOf(element), employeeList.indexOf(element) + 1); 
+    
+      activeList.push("Employee Deleted")
     }
-  }
+  });
 
-  printUser();
+  console.log(employeeList);
+
+  renderElement();
 }
 
 $("#Print").on('click', displayPrint);

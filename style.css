@@ -1,3 +1,28 @@
+body {
+    height: 100vh;
+    display: grid;
+    grid-template-rows: 50px 1fr;
+    grid-template-columns: 50px 1fr;
+    grid-gap: 0px;
+}
+
+#appTitle {
+    grid-row: span 1;
+    grid-column: span 2;
+    background-color: blue;
+}
+
+nav {
+    grid-row: span 1;
+    grid-column: span 1;
+    background-color: gray;
+}
+
+#content {
+    grid-row: span 1;
+    grid-column: span 1;
+}
+
 .hider {
     display: none;
 }
