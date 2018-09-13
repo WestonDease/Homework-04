@@ -145,6 +145,10 @@ function setAllFeilds() {
 // PRINT EMPLOYEE LIST ROUTINE
 //
 function displayPrint() {
+
+  setInput();
+  userReset = "";
+
   employeeList.forEach(element => {
     activeList.push(element.name);
     activeList.push(element.officeNum);
