@@ -59,7 +59,7 @@ var requiredAction;
 function renderElement (){
   $("#display-board").empty();
   for(let i = 0; i < activeList.length; i++){
-      $("#display-board").append("<div>" + activeList[i] + "</div>")
+      $("#display-board").append(`<div class= "listItem">` + activeList[i] + `</div>`)
   }
   console.log(activeList);
 
@@ -130,6 +130,7 @@ function setInput(){
 function setName() {
     $(".name").toggleClass("hider");
     $(".button").toggleClass("hider");
+    $(".divider").toggleClass("hider");
 }
 
 function setAllFeilds() {
@@ -137,6 +138,7 @@ function setAllFeilds() {
   $(".officeNum").toggleClass("hider");
   $(".phoneNum").toggleClass("hider");
   $(".button").toggleClass("hider");
+  $(".divider").toggleClass("hider");
 }
 
 
@@ -153,6 +155,7 @@ function displayPrint() {
     activeList.push(element.name);
     activeList.push(element.officeNum);
     activeList.push(element.phoneNum);
+    activeList.push("<br>");
   });
 
   renderElement();
@@ -165,7 +168,10 @@ function displayPrint() {
 function displayVerify(){
   event.preventDefault();
 
-  //reveal name and button
+  //resets activelist
+  renderElement();
+
+  //reveal name and button, resets previous buttons
   setInput();
   userReset = "setName";
   setInput();
@@ -186,9 +192,6 @@ function verifyUser() {
   
   activeList.push(found);
   renderElement();
-
-  //$(".name").toggleClass("hider");
-  //$(".button").toggleClass("hider");
 }
 
 
@@ -197,6 +200,8 @@ function verifyUser() {
 //
 function displayLookup(){
   
+  renderElement();
+
   setInput();
   userReset = "setName";
   setInput();
@@ -222,6 +227,8 @@ function lookupUser() {
 //
 function displayContains(){
 
+  renderElement();
+
   setInput();
   userReset = "setName";
   setInput();
@@ -246,6 +253,8 @@ function containsUser() {
 // Update List Routine
 //
 function displayUpdate(){
+
+  renderElement();
 
   setInput();
   userReset = "setAllFeilds";
@@ -279,6 +288,8 @@ function updateUser() {
 //
 function displayAdd() {
 
+  renderElement();
+
   setInput();
   userReset = "setAllFeilds";
   setInput();
@@ -303,6 +314,8 @@ function addUser() {
 //
 function displayDelete() {
   
+  renderElement();
+
   setInput();
   userReset = "setName";
   setInput();

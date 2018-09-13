@@ -50,9 +50,12 @@ nav {
     border: solid;
     border-color: darkgray;
     border-radius: 20px;
+    margin-left: 300px;
+    margin-bottom: 20px;
 }
 
 .button {
+    color: darkgray;
     background: none;
     border: none;
     font-size: 100%;
@@ -64,4 +67,12 @@ nav {
 
 #displayBoard {
     font-family: sans-serif;
+}
+
+.listItem {
+    padding-left: 300px;
+}
+
+.name {
+    margin-top: 40px;
 }
